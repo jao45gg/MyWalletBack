@@ -38,8 +38,24 @@ export async function signIn(req, res) {
 
 
         const token = uuid();
-        await db.collection("sessions").insertOne({ token, idUser: user.id });
+        await db.collection("sessions").insertOne({ token, idUser: user._id });
         res.send(token);
+
+    } catch (err) {
+
+        res.status(500).send(err.message);
+
+    }
+
+}
+
+export async function logOut(req, res) {
+
+    try {
+
+        const token = res.locals.session.token;
+        await db.collection("sessions").deleteOne({ token });
+        res.send();
 
     } catch (err) {
 
