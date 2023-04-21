@@ -1,6 +1,7 @@
 import { db } from "../database/database.connection.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
+import { ObjectId } from "mongodb";
 
 export async function signUp(req, res) {
 
@@ -56,6 +57,24 @@ export async function logOut(req, res) {
         const token = res.locals.session.token;
         await db.collection("sessions").deleteOne({ token });
         res.send();
+
+    } catch (err) {
+
+        res.status(500).send(err.message);
+
+    }
+
+}
+
+export async function getUser(req, res) {
+
+    try {
+
+        const token = res.locals.session.token;
+        const id = res.locals.session.idUser;
+        console.log(id);
+        const user = await db.collection("users").findOne({ _id: id });
+        res.send(user.name);
 
     } catch (err) {
 
