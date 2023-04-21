@@ -10,8 +10,29 @@ export async function newTransaction(req, res) {
 
         if (type !== "input" && type !== "output") return res.status(422).send("Invalid type of transaction!");
 
-        await db.collection("transactions").insertOne({ value, description, date: dayjs().format("DD/MM"), type });
+        await db.collection("transactions").insertOne({ value, description, date: dayjs().format("DD/MM"), type, sortDate: Date.now() });
         res.sendStatus(201);
+
+    } catch (err) {
+
+        res.status(500).send(err.message);
+
+    }
+
+}
+
+export async function getTransactions(req, res) {
+
+    try {
+
+        const transactions = await db.collection("transactions").find().toArray();
+        transactions.sort((a, b) => {
+            if (a.sortDate > b.sortDate) return 1;
+            if (a.sortDate < b.sortDate) return -1;
+            return 0;
+        })
+
+        res.send(transactions);
 
     } catch (err) {
 
