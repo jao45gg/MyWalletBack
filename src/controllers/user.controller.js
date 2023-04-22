@@ -72,7 +72,6 @@ export async function getUser(req, res) {
 
         const token = res.locals.session.token;
         const id = res.locals.session.idUser;
-        console.log(id);
         const user = await db.collection("users").findOne({ _id: id });
         res.send(user.name);
 
