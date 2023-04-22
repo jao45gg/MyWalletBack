@@ -8,6 +8,6 @@ const transactionsRouter = Router();
 transactionsRouter.use(authValidation);
 
 transactionsRouter.post("/newTransaction/:type", validateSchema(transactionSchema), newTransaction);
-transactionsRouter.get("/newTransaction", getTransactions);
+transactionsRouter.get("/transactions", getTransactions);
 
 export default transactionsRouter;

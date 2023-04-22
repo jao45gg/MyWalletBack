@@ -14,7 +14,7 @@ export async function signUp(req, res) {
 
         const hash = bcrypt.hashSync(password, 10);
 
-        await db.collection("users").insertOne({ name, email, password: hash });
+        await db.collection("users").insertOne({ name, email, password: hash, balance: 0 });
         res.sendStatus(201);
 
     } catch (err) {
@@ -73,7 +73,7 @@ export async function getUser(req, res) {
         const token = res.locals.session.token;
         const id = res.locals.session.idUser;
         const user = await db.collection("users").findOne({ _id: id });
-        res.send(user.name);
+        res.send({name: user.name, balance: user.balance});
 
     } catch (err) {
 
